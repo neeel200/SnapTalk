@@ -43,7 +43,6 @@ const Signup = () => {
       });
       return;
     }
-    console.log(name, email, password, pic);
     try {
       const config = {
         headers: {
@@ -60,7 +59,9 @@ const Signup = () => {
         },
         config
       );
-      console.log(data);
+      
+      const response = await axios.get(`/api/user/profile/image?key=${data.pic}`)
+      data.pic = response.data.s3Url
       toast({
         title: "Registration Successful",
         status: "success",
@@ -84,7 +85,7 @@ const Signup = () => {
     }
   };
 
-  const postDetails = (profilePic) => {
+  const postDetails = async (profilePic) => {
     console.log("profilePic", profilePic)
     setPicLoading(true);
     if (profilePic === undefined) {
@@ -97,21 +98,19 @@ const Signup = () => {
       });
       return;
     }
-    
+
     const type = profilePic.type;
     const name = profilePic.name;
-    const extension = type?.split("/")[1];
     if (type === "image/jpeg" || type === "image/png" || type === "image/avif") {
-      const imageBuffer = profilePic.arrayBuffer();
-      console.log("image buffer", imageBuffer)
-      axios.get(`/api/user/presignedurl?fileName=${name}.${extension}`).then((response) => {
+      const imageBuffer = await profilePic.arrayBuffer();
+      axios.get(`/api/user/presignedurl?fileName=${name}`).then((response) => {
         return axios.put(response.data.url, imageBuffer);
       }).then((putResponse) => {
-        if(putResponse.status !== 200) {
+        if (putResponse.status !== 200) {
           throw new Error("put image failed in s3 !")
         }
-        console.log(putResponse);
-        //setPic(data.url.toString());
+        setPic(name)
+
         setPicLoading(false);
       }).catch((err) => {
         console.log(err);
