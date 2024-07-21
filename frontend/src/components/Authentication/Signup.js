@@ -97,7 +97,37 @@ const Signup = () => {
       });
       return;
     }
-
+    
+    const type = profilePic.type;
+    const name = profilePic.name;
+    const extension = type?.split("/")[1];
+    if (type === "image/jpeg" || type === "image/png" || type === "image/avif") {
+      const imageBuffer = profilePic.arrayBuffer();
+      console.log("image buffer", imageBuffer)
+      axios.get(`/api/user/presignedurl?fileName=${name}.${extension}`).then((response) => {
+        return axios.put(response.data.url, imageBuffer);
+      }).then((putResponse) => {
+        if(putResponse.status !== 200) {
+          throw new Error("put image failed in s3 !")
+        }
+        console.log(putResponse);
+        //setPic(data.url.toString());
+        setPicLoading(false);
+      }).catch((err) => {
+        console.log(err);
+        setPicLoading(false);
+      })
+    } else {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
   };
 
   return (
