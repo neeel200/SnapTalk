@@ -45,8 +45,11 @@ const Login = () => {
         { email, password },
         config
       );
-      const response = await axios.get(`/api/user/profile/image?key=${data.pic}`)
-      data.pic = response.data.s3Url
+      if (data.pic) {
+
+        const response = await axios.get(`/api/user/profile/image?key=${data.pic}`)
+        data.pic = response.data.s3Url
+      }
 
       toast({
         title: "Login Successful",
@@ -114,7 +117,7 @@ const Login = () => {
         width="100%"
         onClick={() => {
           setEmail("guest@example.com");
-          setPassword("123456");
+          setPassword("abc");
         }}
       >
         Get Guest User Credentials
