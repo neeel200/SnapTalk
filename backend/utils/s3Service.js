@@ -1,5 +1,6 @@
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3")
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner")
+const asyncHandler = require("express-async-handler");
 const s3 = new S3Client({});
 
 const getS3SignedURL = asyncHandler(async (req, res, next) => {
