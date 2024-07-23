@@ -86,7 +86,7 @@ const Signup = () => {
   };
 
   const postDetails = async (profilePic) => {
-    console.log("profilePic", profilePic)
+    // console.log("profilePic", profilePic)
     setPicLoading(true);
     if (profilePic === undefined) {
       toast({
@@ -113,7 +113,7 @@ const Signup = () => {
 
         setPicLoading(false);
       }).catch((err) => {
-        console.log(err);
+        // console.log(err);
         setPicLoading(false);
       })
     } else {
