@@ -14,7 +14,7 @@ ReactDOM.render(
         <App />
       </ChatProvider>
     </BrowserRouter>
-  </ChakraProvider>,
+  </ChakraProvider>, 
   document.getElementById("root")
 );
 

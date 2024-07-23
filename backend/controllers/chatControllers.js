@@ -9,7 +9,7 @@ const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
-    console.log("UserId param not sent with request");
+    // console.log("UserId param not sent with request");
     return res.sendStatus(400);
   }
 
@@ -56,7 +56,7 @@ const accessChat = asyncHandler(async (req, res) => {
 //@access          Protected
 const fetchChats = asyncHandler(async (req, res) => {
   try {
-    Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    Chat.find({ users: {$in:[req.user._id]} })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
